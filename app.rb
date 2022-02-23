@@ -35,6 +35,22 @@ post '/newpost' do
     return erb :newpost
   else
     @db.execute 'insert into Posts (postdate, post) values (datetime(), ?)', [newuserpost]
-    erb 'Ваш пост отправлен!'
+    redirect to '/'
   end
+end
+
+get '/post/:post_id' do
+  post_id = params[:post_id]
+
+  @posts = @db.execute 'select * from Posts where id - ?', [post_id]
+  @row = @posts[0]
+
+  erb :post
+end
+
+post '/post/:post_id' do
+  post_id = params[:post_id]
+  newcomment = params[:newcomment]
+
+  erb "#{newcomment} #{post_id}"
 end

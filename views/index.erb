@@ -4,6 +4,7 @@
         <div class="card-body">
           <h5 class="card-title"><%= post['postdate'] %></h5>
           <p class="card-text"><%= post['post'] %></p>
+          <a href="/post/<%= post['id'] %>" class="btn btn-primary">Коментарии</a>
         </div>
       </div>
 <% end %>

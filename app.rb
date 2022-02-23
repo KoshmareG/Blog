@@ -7,7 +7,10 @@ configure do
   enable :sessions
 end
 
-
 get '/' do
   erb 'Hello'
+end
+
+get '/newpost' do
+  erb :newpost
 end

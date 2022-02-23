@@ -28,5 +28,12 @@ end
 
 post '/newpost' do
   newuserpost = params[:newuserpost]
-  erb 'Ваш пост отправлен!'
+
+  if newuserpost.size <= 0
+    @error = 'Введите текст поста'
+    return erb :newpost
+  else
+    @db.execute 'insert into Posts (postdate, post) values (datetime(), ?)', [newuserpost]
+    erb 'Ваш пост отправлен!'
+  end
 end

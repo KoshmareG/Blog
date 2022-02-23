@@ -31,10 +31,10 @@
 				</div>
 			</nav>
 
-			<div>
-				<%if @error && @error.size > 0 then %>
-						<div class="alert alert-error"><%=@error%></div>
-				<% end %>
+			<div class="mb-3">
+				<p><div class="container"><%if @error && @error.size > 0 then %>
+						<div class="alert alert-danger"><%=@error%></div>
+				<% end %></div></p>
 				<%= yield %>
 			</div>
 		</div>

@@ -16,6 +16,8 @@ end
 configure do
   init_database
   @db.execute 'create table if not exists "Posts" ("id" integer primary key autoincrement, "postdate" date, "post" text)'
+
+  @db.execute 'create table if not exists "Comments" ("id" integer primary key autoincrement, "comdate" date, "comment" text, "post_id" integer)'
 end
 
 get '/' do
@@ -52,5 +54,7 @@ post '/post/:post_id' do
   post_id = params[:post_id]
   newcomment = params[:newcomment]
 
-  erb "#{newcomment} #{post_id}"
+  @db.execute 'insert into Comments (comdate, comment, post_id) values (datetime(), ?, ?)', [newcomment, post_id]
+
+  redirect to ('/post/' + post_id)
 end

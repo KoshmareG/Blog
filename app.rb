@@ -42,8 +42,8 @@ end
 get '/post/:post_id' do
   post_id = params[:post_id]
 
-  @posts = @db.execute 'select * from Posts where id - ?', [post_id]
-  @row = @posts[0]
+  posts = @db.execute 'select * from Posts where id = ?', [post_id]
+  @row = posts[0]
 
   erb :post
 end

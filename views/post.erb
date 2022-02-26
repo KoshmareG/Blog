@@ -12,6 +12,9 @@
     <h5>Написать комментарий</h5>
     <form action="/post/<%= @row['id'] %>" method="POST">
         <div class="mb-3">
+            <label class="form-label">Ваше имя</label>
+            <input name="commentusername" class="form-control" id="exampleDataList" placeholder="Имя" style="width: 50rem;">
+            <label class="form-label">Комментарий</label>
             <textarea name="newcomment" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Напишите Ваш комментарий" style="width: 50rem;"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Отправить</button>
@@ -20,8 +23,11 @@
     <h4>Комментарии</h4>
     <% @comments.each do |comment| %>
     <div class="card mb-3" style="width: 50rem;">
+        <div class="card-header">
+            <%= comment['comdate'] %>
+        </div>
         <div class="card-body">
-          <h6 class="card-title"><%= comment['comdate'] %></h6>
+          <h4 class="card-title"><%= comment['commentusername'] %></h4>
           <p class="card-text"><%= comment['comment'] %></p>
         </div>
       </div>

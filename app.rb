@@ -15,9 +15,9 @@ end
 
 configure do
   init_database
-  @db.execute 'create table if not exists "Posts" ("id" integer primary key autoincrement, "postdate" date, "post" text)'
+  @db.execute 'create table if not exists "Posts" ("id" integer primary key autoincrement, "username" text, "postdate" date, "post" text)'
 
-  @db.execute 'create table if not exists "Comments" ("id" integer primary key autoincrement, "comdate" date, "comment" text, "post_id" integer)'
+  @db.execute 'create table if not exists "Comments" ("id" integer primary key autoincrement, "comdate" date, "commentusername" text, "comment" text, "post_id" integer)'
 end
 
 get '/' do
@@ -31,12 +31,13 @@ end
 
 post '/newpost' do
   newuserpost = params[:newuserpost]
+  username = params[:username]
 
   if newuserpost.size <= 0
     @error = 'Введите текст поста'
     return erb :newpost
   else
-    @db.execute 'insert into Posts (postdate, post) values (datetime(), ?)', [newuserpost]
+    @db.execute 'insert into Posts (postdate, username, post) values (datetime(), ?, ?)', [username, newuserpost]
     redirect to '/'
   end
 end
@@ -54,9 +55,10 @@ end
 
 post '/post/:post_id' do
   post_id = params[:post_id]
+  commentusername = params[:commentusername]
   newcomment = params[:newcomment]
 
-  @db.execute 'insert into Comments (comdate, comment, post_id) values (datetime(), ?, ?)', [newcomment, post_id]
+  @db.execute 'insert into Comments (comdate, commentusername, comment, post_id) values (datetime(), ?, ?, ?)', [commentusername, newcomment, post_id]
 
   redirect to ('/post/' + post_id)
 end

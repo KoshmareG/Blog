@@ -13,9 +13,9 @@
     <form action="/post/<%= @row['id'] %>" method="POST">
         <div class="mb-3">
             <label class="form-label">Ваше имя</label>
-            <input name="commentusername" class="form-control" id="exampleDataList" placeholder="Имя" style="width: 50rem;">
+            <input name="commentusername" class="form-control" id="exampleDataList" placeholder="Имя" style="width: 50rem;" value="<%= @commentusername %>">
             <label class="form-label">Комментарий</label>
-            <textarea name="newcomment" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Напишите Ваш комментарий" style="width: 50rem;"></textarea>
+            <textarea name="newcomment" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Напишите Ваш комментарий" style="width: 50rem;" value="<%= @newcomment %>"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Отправить</button>
     </form>

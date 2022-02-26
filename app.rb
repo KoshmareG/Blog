@@ -9,6 +9,16 @@ def init_database
   return @db
 end
 
+def form_validation error_hash
+  error = error_hash.select{|key, value| params[key].empty?}.values.join(", ")
+end
+
+def comment_init post_id
+  posts = @db.execute 'select * from Posts where id = ?', [post_id]
+  @row = posts[0]
+  @comments = @db.execute 'select * from Comments where post_id = ? order by id', [post_id]
+end
+
 before do
   init_database
 end
@@ -30,35 +40,45 @@ get '/newpost' do
 end
 
 post '/newpost' do
-  newuserpost = params[:newuserpost]
-  username = params[:username]
+  @newuserpost = params[:newuserpost]
+  @username = params[:username]
 
-  if newuserpost.size <= 0
-    @error = 'Введите текст поста'
-    return erb :newpost
-  else
-    @db.execute 'insert into Posts (postdate, username, post) values (datetime(), ?, ?)', [username, newuserpost]
+  error_hash = {:username => 'имя', :newuserpost => 'пост'}
+
+  error = form_validation error_hash
+
+  if error == ''
+    @db.execute 'insert into Posts (postdate, username, post) values (datetime(), ?, ?)', [@username, @newuserpost]
     redirect to '/'
+  else
+    @error = "Заполните поля: " + error
+    return erb :newpost
   end
 end
 
 get '/post/:post_id' do
   post_id = params[:post_id]
 
-  posts = @db.execute 'select * from Posts where id = ?', [post_id]
-  @row = posts[0]
-
-  @comments = @db.execute 'select * from Comments where post_id = ? order by id', [post_id]
+  comment_init post_id
 
   erb :post
 end
 
 post '/post/:post_id' do
   post_id = params[:post_id]
-  commentusername = params[:commentusername]
-  newcomment = params[:newcomment]
+  @commentusername = params[:commentusername]
+  @newcomment = params[:newcomment]
 
-  @db.execute 'insert into Comments (comdate, commentusername, comment, post_id) values (datetime(), ?, ?, ?)', [commentusername, newcomment, post_id]
+  error_hash = {:commentusername => 'имя', :newcomment => 'комментарий'}
 
-  redirect to ('/post/' + post_id)
+  error = form_validation error_hash
+
+  if error == ''
+    @db.execute 'insert into Comments (comdate, commentusername, comment, post_id) values (datetime(), ?, ?, ?)', [@commentusername, @newcomment, post_id]
+    redirect to ('/post/' + post_id)
+  else
+    comment_init post_id
+    @error = "Заполните поля: " + error
+    return erb :post
+  end
 end

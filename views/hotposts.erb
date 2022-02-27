@@ -1,0 +1,13 @@
+<h4>Горячие посты</h4>
+<% @posts.each do |post| %>
+    <div class="card mb-3" style="width: 50rem;">
+        <div class="card-header">
+            <%= post['postdate'] %>
+        </div>
+        <div class="card-body">
+          <h4 class="card-title"><%= post['username'] %></h4>
+          <p class="card-text"><%= post['post'] %></p>
+          <a href="/post/<%= post['id'] %>" class="btn btn-primary">Коментарии</a>
+        </div>
+      </div>
+<% end %>

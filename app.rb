@@ -35,6 +35,11 @@ get '/' do
   erb :index
 end
 
+get '/hotposts' do
+  @posts = @db.execute 'select * from Posts order by id desc limit 4'
+  erb :hotposts
+end
+
 get '/newpost' do
   erb :newpost
 end

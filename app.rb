@@ -14,14 +14,18 @@ end
 
 class Comment < ActiveRecord::Base
   belongs_to :userpost
+
+  validates :commentname, presence: true
+  validates :usercomment, presence: true
 end
 
 get '/' do
-  @userpost = Userpost.all
+  @userpost = Userpost.order 'id desc'
   erb :index
 end
 
 get '/hotposts' do
+  @userpost = Userpost.order 'id desc'
   erb :hotposts
 end
 
